@@ -1,4 +1,4 @@
-import type { Astral, AstralLiteral, AstralObject } from "../models/api/astral"
+import type { AstralLiteral, AstralObject } from "../models/api/astral"
 import type { Cometh } from "../models/api/cometh"
 import type { Polyanet } from "../models/api/polyanet"
 import type { Soloon } from "../models/api/soloon"
