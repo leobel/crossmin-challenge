@@ -1,6 +1,8 @@
 import axios from '../api/axios'
+import type { Cometh } from '../models/api/cometh';
 import type { GoalMap } from '../models/api/goal-map';
 import type { Map } from '../models/api/map';
+import type { Soloon } from '../models/api/soloon';
 
 export async function getGoalMap(candidateId: string): Promise<GoalMap> {
     const response = await axios.get<GoalMap>(`/map/${candidateId}/goal`)
@@ -13,15 +15,49 @@ export async function getMap(candidateId: string): Promise<Map> {
 }
 
 export async function addPolyanet(candidateId: string, row: number, col: number): Promise<void> {
-    return axios.post(`/polyanets`, {
+    return addRequest(`/polyanets`, {
         candidateId: candidateId,
         row: row,
         column: col
     })
 }
 
+export async function addSoloon(candidateId: string, row: number, col: number, obj: Soloon): Promise<void> {
+    return addRequest(`/soloons`, {
+        candidateId: candidateId,
+        row: row,
+        column: col,
+        color: obj.color
+    })
+}
+
+export async function addCometh(candidateId: string, row: number, col: number, obj: Cometh): Promise<void> {
+    return addRequest(`/comeths`, {
+        candidateId: candidateId,
+        row: row,
+        column: col,
+        direction: obj.direction
+    })
+}
+
 export async function deletePolyanet(candidateId: string, row: number, col: number): Promise<void> {
-    return axios.delete(`/polyanets`, {
+    return deleteRquest('/polyanets', candidateId, row, col)
+}
+
+export async function deleteSoloon(candidateId: string, row: number, col: number): Promise<void> {
+    return deleteRquest('/soloons', candidateId, row, col)
+}
+
+export async function deleteCometh(candidateId: string, row: number, col: number): Promise<void> {
+    return deleteRquest('/comeths', candidateId, row, col)
+}
+
+async function addRequest(url: string,  data: any): Promise<void> {
+    return axios.post(url, data)
+}
+
+async function deleteRquest(url: string, candidateId: string, row: number, col: number): Promise<void> {
+    return axios.delete(url, {
         data: {
             candidateId: candidateId,
             row: row,

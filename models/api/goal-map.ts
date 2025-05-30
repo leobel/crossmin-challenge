@@ -1,5 +1,5 @@
-import type { Astral } from "./astral-object";
+import type { AstralLiteral } from "./astral";
 
 export interface GoalMap {
-    goal: Astral[][]
+    goal: AstralLiteral[][]
 }

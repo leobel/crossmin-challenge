@@ -1,4 +1,4 @@
-import type { Astral } from "./astral-object"
+import type { AstralObject } from "./astral"
 
 export interface Map {
     map: InnerMap
@@ -6,5 +6,5 @@ export interface Map {
 
 interface InnerMap {
     _id: string
-    content: Astral[][]
+    content: AstralObject[][]
 }
