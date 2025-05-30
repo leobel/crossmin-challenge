@@ -9,15 +9,16 @@ export function delay(ms = 500) {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export async function requestWithRetry(fn: () => Promise<any>, retries = 5, backoff = 1000) {
+export async function requestWithRetry<T>(fn: () => Promise<T>, retries = 5, backoff = 1000): Promise<PromiseSettledResult<T>> {
     try {
         const response = await fn()
-        return { status: 'fulfilled', value: response.data }
+        return { status: 'fulfilled', value: response }
     } catch (error) {
-        if (retries > 0 && error.response && error.response.status === 429) {
-            // Wait for backoff duration before retrying
+        if (retries > 0 && error.response?.status === 429) {
+            // delay before requesting again
             await delay(backoff)
-            // Retry with increased backoff
+            
+            // trye
             return requestWithRetry(fn, retries - 1, backoff * 2)
         } else {
             return { status: 'rejected', reason: error }
@@ -27,7 +28,7 @@ export async function requestWithRetry(fn: () => Promise<any>, retries = 5, back
 
 export const SpaceObject: Space = { name: "SPACE", type: -1 }
 
-export function mapAstralLiteralToAstralObject(item: AstralLiteral): AstralObject {
+export function mapLiteralToObject(item: AstralLiteral): AstralObject {
     switch (item) {
         case "SPACE":
             return { name: item, type: -1 } // Assuming -1 represents SPACE
@@ -70,7 +71,7 @@ export function isCometh(obj: AstralObject): obj is Cometh {
     return obj.type === 2 && "direction" in obj;
 }
 
-export function areAstralObjectsEqual(a: AstralObject, b: AstralObject): boolean {
+export function objectsEqual(a: AstralObject, b: AstralObject): boolean {
     if (isSpace(a) && isSpace(b)) {
         return true;
     }
@@ -90,7 +91,7 @@ export function areAstralObjectsEqual(a: AstralObject, b: AstralObject): boolean
     return false;
 }
 
-export function addAstralObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<void> {
+export function addObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<any> {
     if (isPolyanet(obj)) {
         return addPolyanet(candidateId, row, col)
     }
@@ -106,7 +107,7 @@ export function addAstralObject(obj: AstralObject, candidateId: string, row: num
     throw new Error(`Invalid astral object: ${obj}`)
 }   
 
-export function deleteAstralObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<void> {
+export function deleteObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<void> {
     if (isPolyanet(obj)) {
         return deletePolyanet(candidateId, row, col)
     }

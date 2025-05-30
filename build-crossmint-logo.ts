@@ -1,23 +1,28 @@
 import type { GoalMap } from "./models/api/goal-map"
+import { ChallengeError } from "./models/challenge-error"
 import { getMap } from "./services/api"
-import { addAstralObject, areAstralObjectsEqual, deleteAstralObject, mapAstralLiteralToAstralObject, requestWithRetry, SpaceObject } from "./utils"
+import { addObject, objectsEqual, deleteObject, mapLiteralToObject, requestWithRetry, SpaceObject } from "./utils"
 
-export async function buildMintLogo(candidateId: string, goalMap: GoalMap): Promise<boolean> {
+export async function buildMintLogo(candidateId: string, goalMap: GoalMap, retries = 5, backoff = 1000): Promise<void> {
     const map = goalMap.goal
     const currentMap = (await getMap(candidateId)).map.content
     for (let i = 0; i < map.length; i++) {
         for (let j = 0; j < map[i].length; j++) {
-            const goalObj = mapAstralLiteralToAstralObject(map[i][j])
+            const goalObj = mapLiteralToObject(map[i][j])
             const obj = currentMap[i][j] || SpaceObject
-            if (!areAstralObjectsEqual(goalObj, obj)) {
+            if (!objectsEqual(goalObj, obj)) {
                 // delete current obj
-                await requestWithRetry(() => deleteAstralObject(obj, candidateId, i, j))
+                let response = await requestWithRetry(() => deleteObject(obj, candidateId, i, j), retries, backoff)
+                if (response.status === "rejected") {
+                    throw new ChallengeError('Something went wrong', response.reason)
+                }
 
                 // add goal obj
-                await requestWithRetry(() => addAstralObject(goalObj, candidateId, i, j))
+                response = await requestWithRetry(() => addObject(goalObj, candidateId, i, j), retries, backoff)
+                if (response.status === "rejected") {
+                    throw new ChallengeError('Something went wrong', response.reason)
+                }
             }
         }
     }
-
-    return true
 }

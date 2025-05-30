@@ -9,7 +9,6 @@ const candidateId = process.env.CANDIDATE_ID!
 const commands = process.env.VALID_COMMADS!.split(',')
 
 const args = process.argv.slice(2)
-console.log('Args:', args)
 
 function getArg(flag: string): string | undefined {
     const index = args.indexOf(flag)
@@ -41,14 +40,10 @@ switch (cmd) {
 async function buildCross(candidateId: string) {
     try {
         const goalMap = await getGoalMap(candidateId)
-        const ok = await buildCrossPolyanets(candidateId, goalMap)
-        if (ok) {
-            console.log("Yeah!, cross polyanets built")
-        } else {
-            console.log(`couldn't build cross polyanet for candidate: ${candidateId}`)
-        }
+        await buildCrossPolyanets(candidateId, goalMap)
+        console.log("Yeah!, cross polyanets built")
     } catch (err) {
-        console.log('Error:', err)
+        console.log(err)
         console.log(`couldn't build cross polyanet for candidate: ${candidateId}`)
     }
 }
@@ -56,14 +51,10 @@ async function buildCross(candidateId: string) {
 async function buildLogo(candidateId: string) {
     try {
         const goalMap = await getGoalMap(candidateId)
-        const ok = await buildMintLogo(candidateId, goalMap)
-        if (ok) {
-            console.log("Yeah!, crossmint logo built")
-        } else {
-            console.log(`couldn't build crossmint logo for candidate: ${candidateId}`)
-        }
+        await buildMintLogo(candidateId, goalMap)
+        console.log("Yeah!, crossmint logo built")
     } catch (err) {
-        console.log('Error:', err)
+        console.log(err)
         console.log(`couldn't build crossmint logo for candidate: ${candidateId}`)
     }
 }
