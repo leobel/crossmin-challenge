@@ -1,10 +1,12 @@
 {
   "name": "challenge",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js -c logo",
+    "dev": "npx tsx src/index.ts -c logo",
+    "build": "tsc"
   },
   "author": "leobelizquierdo@gmail.com",
   "license": "ISC",

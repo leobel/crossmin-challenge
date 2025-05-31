@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
-import { buildCrossPolyanets } from './build-cross-polyanets'
-import { getGoalMap } from './services/api'
-import { buildMintLogo } from './build-crossmint-logo'
+import { buildCrossPolyanets } from './build-cross-polyanets.js'
+import { getGoalMap } from './services/api.js'
+import { buildMintLogo } from './build-crossmint-logo.js'
 
 dotenv.config()
 

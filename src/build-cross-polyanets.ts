@@ -1,7 +1,7 @@
-import type { GoalMap } from "./models/api/goal-map"
-import { ChallengeError } from "./models/challenge-error"
-import { getMap } from "./services/api"
-import { addObject, objectsEqual, deleteObject, mapLiteralToObject, requestWithRetry } from "./utils"
+import type { GoalMap } from "./models/api/goal-map.js"
+import { ChallengeError } from "./models/challenge-error.js"
+import { getMap } from "./services/api.js"
+import { addObject, objectsEqual, deleteObject, mapLiteralToObject, requestWithRetry } from "./utils/index.js"
 
 export async function buildCrossPolyanets(candidateId: string, goalMap: GoalMap, retries = 5, backoff = 1000): Promise<void> {
     const map = goalMap.goal

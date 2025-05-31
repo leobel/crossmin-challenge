@@ -1,4 +1,4 @@
-import type { AstralObject } from "./astral";
+import type { AstralObject } from "./astral.js";
 
 export type SoloonColor = "blue" | "red" | "purple" | "white"
 

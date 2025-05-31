@@ -1,8 +1,8 @@
-import axios from '../api/axios'
-import type { Cometh } from '../models/api/cometh';
-import type { GoalMap } from '../models/api/goal-map';
-import type { Map } from '../models/api/map';
-import type { Soloon } from '../models/api/soloon';
+import axios from '../api/axios.js'
+import type { Cometh } from '../models/api/cometh.js';
+import type { GoalMap } from '../models/api/goal-map.js';
+import type { Map } from '../models/api/map.js';
+import type { Soloon } from '../models/api/soloon.js';
 
 export async function getGoalMap(candidateId: string): Promise<GoalMap> {
     const response = await axios.get<GoalMap>(`/map/${candidateId}/goal`)

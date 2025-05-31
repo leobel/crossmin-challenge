@@ -1,9 +1,10 @@
-import type { AstralLiteral, AstralObject } from "../models/api/astral"
-import type { Cometh } from "../models/api/cometh"
-import type { Polyanet } from "../models/api/polyanet"
-import type { Soloon } from "../models/api/soloon"
-import type { Space } from "../models/api/space"
-import { addCometh, addPolyanet, addSoloon, deleteCometh, deletePolyanet, deleteSoloon } from "../services/api"
+import { addCometh, addPolyanet, addSoloon, deleteCometh, deletePolyanet, deleteSoloon } from "../services/api.js"
+import type { AstralLiteral, AstralObject } from "../models/api/astral.js"
+import type { Cometh } from "../models/api/cometh.js"
+import type { Polyanet } from "../models/api/polyanet.js"
+import type { Soloon } from "../models/api/soloon.js"
+import type { Space } from "../models/api/space.js"
+import { ChallengeError } from "../models/challenge-error.js"
 
 export function delay(ms = 500) {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -13,7 +14,7 @@ export async function requestWithRetry<T>(fn: () => Promise<T>, retries = 5, bac
     try {
         const response = await fn()
         return { status: 'fulfilled', value: response }
-    } catch (error) {
+    } catch (error: any) {
         if (retries > 0 && error.response?.status === 429) {
             // delay before requesting again
             await delay(backoff)
@@ -51,7 +52,7 @@ export function mapLiteralToObject(item: AstralLiteral): AstralObject {
         case "LEFT_COMETH":
             return { name: item, type: 2, direction: "left" } as Cometh
         default:
-            throw new Error(`Unknown AstralLiteral: ${item}`)
+            throw new ChallengeError(`Unknown AstralLiteral`, item)
     }
 }
 
@@ -91,7 +92,11 @@ export function objectsEqual(a: AstralObject, b: AstralObject): boolean {
     return false;
 }
 
-export function addObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<any> {
+export async function addObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<any> {
+    if (isSpace(obj)) {
+        return
+    }
+
     if (isPolyanet(obj)) {
         return addPolyanet(candidateId, row, col)
     }
@@ -104,10 +109,14 @@ export function addObject(obj: AstralObject, candidateId: string, row: number, c
         return addCometh(candidateId, row, col, obj)
     }
 
-    throw new Error(`Invalid astral object: ${obj}`)
+    throw new ChallengeError(`Invalid astral object`, {obj, row, col})
 }   
 
-export function deleteObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<void> {
+export async function deleteObject(obj: AstralObject, candidateId: string, row: number, col: number): Promise<void> {
+    if (isSpace(obj)) {
+        return
+    }
+
     if (isPolyanet(obj)) {
         return deletePolyanet(candidateId, row, col)
     }
@@ -120,5 +129,5 @@ export function deleteObject(obj: AstralObject, candidateId: string, row: number
         return deleteCometh(candidateId, row, col)
     }
 
-    throw new Error(`Invalid astral object: ${obj}`)
+    throw new ChallengeError(`Invalid astral object`, {obj, row, col})
 }
