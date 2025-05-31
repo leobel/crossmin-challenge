@@ -1,10 +1,13 @@
-export type AstralLiteral = "SPACE" | "POLYANET" | "BLUE_SOLOON" | "RED_SOLOON" | "PURPLE_SOLOON" | "WHITE_SOLOON" | "UP_COMETH" | "DOWN_COMETH" | "RIGHT_COMETH" | "LEFT_COMETH"
+import type { ComethLiteral, ComethType } from "./cometh.js"
+import type { PolyanetLiteral, PolyanetType } from "./polyanet.js"
+import type { SoloonLiteral, SoloonType } from "./soloon.js"
+import type { SpaceLiteral, SpaceType } from "./space.js"
+
+export type AstralLiteral = SpaceLiteral | PolyanetLiteral | SoloonLiteral | ComethLiteral
 export type AstralType = SpaceType | PolyanetType | SoloonType | ComethType
-export type SpaceType = -1
-export type PolyanetType = 0
-export type SoloonType = 1
-export type ComethType = 2
 export interface AstralObject {
-    name: AstralLiteral
     type: AstralType
+
+    equal(obj: AstralObject): boolean
+    toLiteral(): AstralLiteral
 }
