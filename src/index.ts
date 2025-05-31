@@ -1,9 +1,9 @@
-import dotenv from 'dotenv'
+import 'dotenv/config.js'
+
 import { buildCrossPolyanets } from './build-cross-polyanets.js'
 import { getGoalMap } from './services/api.js'
 import { buildMintLogo } from './build-crossmint-logo.js'
 
-dotenv.config()
 
 const candidateId = process.env.CANDIDATE_ID!
 const commands = process.env.VALID_COMMADS!.split(',')

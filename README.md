@@ -4,7 +4,7 @@
 2. add `.env` file on root dir with this structure
 ```jsx
 BASE_URL="https://challenge.crossmint.io/api"
-CANDIDATE_ID="your candidate id"
+CANDIDATE_ID="your_candidate_id" # use real candidate id
 VALID_COMMADS="cross,logo"
 ```
 3. Install dependecies `npm install`
