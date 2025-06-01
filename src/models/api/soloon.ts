@@ -1,4 +1,5 @@
-import type { AstralObject, AstralType } from "./astral.js";
+import type { ISoloonService } from "../../services/soloon.service.js";
+import type { AstralObject, AstralType, Coordinates } from "./astral.js";
 
 export const SOLOON_TYPE = 1
 export type SoloonType = typeof SOLOON_TYPE
@@ -12,7 +13,12 @@ export class Soloon implements AstralObject {
     // type: 1
     type: AstralType
     
-    constructor(readonly color: SoloonColor) {
+    constructor(
+        readonly color: SoloonColor,
+        readonly candidateId: string,
+        readonly coordinates: Coordinates,
+        readonly service: ISoloonService,
+    ) {
        this.type = SOLOON_TYPE
     }
 
@@ -31,5 +37,13 @@ export class Soloon implements AstralObject {
             case "white":
                 return "WHITE_SOLOON"
         }
+    }
+
+    add(): Promise<any> {
+        return this.service.add(this.candidateId, this.coordinates.row, this.coordinates.col, this.color)
+    }
+
+    delete(): Promise<any> {
+        return this.service.delete(this.candidateId, this.coordinates.row, this.coordinates.col)
     }
 }

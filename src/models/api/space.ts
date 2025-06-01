@@ -22,4 +22,12 @@ export class Space implements AstralObject {
     toLiteral(): SpaceLiteral {
         return "SPACE"
     }
+
+    async add(): Promise<any> {
+        return
+    }
+
+    async delete(): Promise<any> {
+        return
+    }
 }

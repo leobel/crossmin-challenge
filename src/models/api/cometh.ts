@@ -1,4 +1,5 @@
-import type { AstralObject, AstralType } from "./astral.js"
+import type { IComethService } from "../../services/cometh.service.js"
+import type { AstralObject, AstralType, Coordinates } from "./astral.js"
 
 export const COMETH_TYPE = 2
 export type ComethType = typeof COMETH_TYPE
@@ -12,7 +13,12 @@ export class Cometh implements AstralObject {
     // type: 2
     type: AstralType
     
-    constructor(readonly direction: ComethDirection) {
+    constructor(
+        readonly direction: ComethDirection,
+        readonly candidateId: string,
+        readonly coordinates: Coordinates,
+        readonly service: IComethService,
+    ) {
        this.type = COMETH_TYPE
     }
 
@@ -31,5 +37,13 @@ export class Cometh implements AstralObject {
             case "right":
                 return "RIGHT_COMETH"
         }
+    }
+
+    add(): Promise<any> {
+        return this.service.add(this.candidateId, this.coordinates.row, this.coordinates.col, this.direction)
+    }
+
+    delete(): Promise<any> {
+        return this.service.delete(this.candidateId, this.coordinates.row, this.coordinates.col)
     }
 }

@@ -1,14 +1,9 @@
 import 'dotenv/config.js'
 
-import { MapService } from './services/map.service.js'
-import { ApiService } from './services/api.service.js'
-import axios from './api/axios.js'
-import { PolyanetService } from './services/polyanet.service.js'
-import { SoloonService } from './services/soloon.service.js'
-import { ComethService } from './services/cometh.service.js'
 import Megaverse from './megaverse.js'
 import type { ObjectMap } from './models/api/map.js'
 import type { AstralLiteral } from './models/api/astral.js'
+import { createAstralObjectMap, mapService } from './utils/index.js'
 
 
 const candidateId = process.env.CANDIDATE_ID!
@@ -41,16 +36,12 @@ switch (cmd) {
 
 async function buildLogo(candidateId: string) {
     try {
-        const apiService = new ApiService(5, 1000, axios)
-        const polyanetService = new PolyanetService(apiService)
-        const soloonService = new SoloonService(apiService)
-        const comethService = new ComethService(apiService)
-        const mapService = new MapService(apiService)
-        const megaverse = new Megaverse(candidateId, polyanetService, soloonService, comethService)
+        const megaverse = new Megaverse(candidateId)
         const goalMap = await mapService.getGoalMap(candidateId)
         const candidateMap = await mapService.getCandidateMap(candidateId)
-
-        const mintLogo = await megaverse.build(goalMap, candidateMap)
+        const goal: ObjectMap = createAstralObjectMap(goalMap, candidateId)
+        const candidate: ObjectMap = createAstralObjectMap(candidateMap, candidateId)
+        const mintLogo = await megaverse.build(goal, candidate)
         console.log("Yeah!, crossmint logo built")
         printMap(mintLogo)
     } catch (err) {

@@ -1,4 +1,5 @@
-import type { AstralObject, AstralType } from "./astral.js"
+import type { IPolyanetService } from "../../services/polyanet.service.js"
+import type { AstralObject, AstralType, Coordinates } from "./astral.js"
 
 export const POLYANET_TYPE = 0
 export type PolyanetType = typeof POLYANET_TYPE
@@ -11,7 +12,11 @@ export class Polyanet implements AstralObject {
     // type: 0
     type: AstralType
     
-    constructor() {
+    constructor(
+        readonly candidateId: string,
+        readonly coordinates: Coordinates,
+        readonly service: IPolyanetService,
+    ) {
        this.type = POLYANET_TYPE
     }
 
@@ -21,5 +26,13 @@ export class Polyanet implements AstralObject {
 
     toLiteral(): PolyanetLiteral {
         return "POLYANET"
+    }
+
+    add(): Promise<any> {
+        return this.service.add(this.candidateId, this.coordinates.row, this.coordinates.col)
+    }
+
+    delete(): Promise<any> {
+        return this.service.delete(this.candidateId, this.coordinates.row, this.coordinates.col)
     }
 }

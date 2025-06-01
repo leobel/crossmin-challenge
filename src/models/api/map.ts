@@ -1,6 +1,7 @@
-import type { AstralLiteral, AstralObject } from "./astral.js"
+import type { AstralLiteral, AstralObject, RawAstralObject } from "./astral.js"
 
 
+export type RawObjectMap = RawAstralObject[][]
 export type ObjectMap = AstralObject[][]
 export type LiteralMap = AstralLiteral[][]
 export interface CandidateMap {
